@@ -31,17 +31,21 @@ end
 namespace :ruboty do
   desc "Start ruboty"
   task :start do
-    command_args  = []
-    command_args += Array(fetch(:ruboty_command))
-    command_args += %w(--dotenv) if fetch(:ruboty_dotenv)
-    command_args += %w(--daemon) if fetch(:ruboty_daemon)
-    command_args += ["--pid", fetch(:ruboty_pid)] if fetch(:ruboty_pid)
-    command_args += Array(fetch(:ruboty_options)) if fetch(:ruboty_options)
-
     on fetch(:ruboty_servers) do
       within release_path do
         with ruboty_env: fetch(:ruboty_env) do
-          execute(*command_args)
+          pid = existing_pid(fetch(:ruboty_pid))
+          if pid
+            info "ruboty is already running."
+          else
+            command_args  = []
+            command_args += Array(fetch(:ruboty_command))
+            command_args += %w(--dotenv) if fetch(:ruboty_dotenv)
+            command_args += %w(--daemon) if fetch(:ruboty_daemon)
+            command_args += ["--pid", fetch(:ruboty_pid)] if fetch(:ruboty_pid)
+            command_args += Array(fetch(:ruboty_options)) if fetch(:ruboty_options)
+            execute(*command_args)
+          end
         end
       end
     end
