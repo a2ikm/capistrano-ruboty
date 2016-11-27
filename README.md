@@ -1,15 +1,13 @@
 # Capistrano::Ruboty
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/capistrano/ruboty`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Ruboty specific capistrano tasks
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'capistrano-ruboty'
+gem 'capistrano-ruboty', group: :development
 ```
 
 And then execute:
@@ -22,7 +20,43 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+# Capfile
+require 'capistrano/ruboty'
+```
+
+```ruby
+# config/deploy.rb
+append :linked_dirs, 'tmp/pids'  # corresponds to :ruboty_pid option
+```
+
+Configurable options, shown here with defaults:
+
+```ruby
+:ruboty_default_hooks   => { true }
+:ruboty_role            => { :app }
+:ruboty_servers         => { release_roles(fetch(:ruboty_role)) }
+:ruboty_env             => { fetch(:ruboty_env, fetch(:stage)) }
+:ruboty_command         => { [:ruboty] }
+:ruboty_daemon          => { true }
+:ruboty_dotenv          => { true }
+:ruboty_pid             => { shared_path.join("tmp", "pids", "ruboty.pid") }
+:ruboty_options         => { "" }
+:ruboty_stop_signal     => { :TERM }
+```
+
+## shared `.env` file
+
+You may need to exclude your `.env` file from your repository for security issues.
+
+If so, you shall configure like below:
+
+```ruby
+# config/deploy.rb
+append :linked_files, '.env'
+```
+
+, and put the `.env` file to the shared directory (its path is `<deploy_to>/shared/.env`) before deploying.
 
 ## Development
 
@@ -32,5 +66,5 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/capistrano-ruboty.
+Bug reports and pull requests are welcome on GitHub at https://github.com/a2ikm/capistrano-ruboty.
 
