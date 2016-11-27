@@ -9,7 +9,7 @@ namespace :load do
     set :ruboty_daemon,       -> { true }
     set :ruboty_dotenv,       -> { true }
     set :ruboty_pid,          -> { shared_path.join("tmp", "pids", "ruboty.pid") }
-    set :ruboty_options,      -> { "" }
+    set :ruboty_options,      -> { nil }
     set :ruboty_stop_signal,  -> { :TERM }
 
     # Rbenv, Chruby, and RVM integration
@@ -35,7 +35,7 @@ namespace :ruboty do
     command_args += %w(--dotenv) if fetch(:ruboty_dotenv)
     command_args += %w(--daemon) if fetch(:ruboty_daemon)
     command_args += ["--pid", fetch(:ruboty_pid)] if fetch(:ruboty_pid)
-    command_args += Array(fetch(:ruboty_options))
+    command_args += Array(fetch(:ruboty_options)) if fetch(:ruboty_options)
 
     on fetch(:ruboty_servers) do
       within release_path do

@@ -41,7 +41,7 @@ Configurable options, shown here with defaults:
 :ruboty_daemon          => { true }
 :ruboty_dotenv          => { true }
 :ruboty_pid             => { shared_path.join("tmp", "pids", "ruboty.pid") }
-:ruboty_options         => { "" }
+:ruboty_options         => { nil }
 :ruboty_stop_signal     => { :TERM }
 ```
 
