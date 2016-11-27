@@ -30,7 +30,8 @@ end
 
 namespace :ruboty do
   task :start do
-    command_args  = Array(fetch(:ruboty_command))
+    command_args  = []
+    command_args += Array(fetch(:ruboty_command))
     command_args += %w(--dotenv) if fetch(:ruboty_dotenv)
     command_args += %w(--daemon) if fetch(:ruboty_daemon)
     command_args += ["--pid", fetch(:ruboty_pid)] if fetch(:ruboty_pid)
