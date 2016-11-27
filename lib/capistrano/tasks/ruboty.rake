@@ -23,8 +23,8 @@ namespace :load do
 end
 
 namespace :deploy do
-  before :starting, :check_ruboty_hooks do
-    invoke "ruboty:add_default_hooks" if fetch(:ruboty_default_hooks)
+  after :publishing, :restart_ruboty do
+    invoke "ruboty:restart" if fetch(:ruboty_default_hooks)
   end
 end
 
@@ -83,9 +83,5 @@ namespace :ruboty do
   task :restart do
     invoke "ruboty:stop"
     invoke "ruboty:start"
-  end
-
-  task :add_default_hooks do
-    after "deploy:publishing", "ruboty:restart"
   end
 end
