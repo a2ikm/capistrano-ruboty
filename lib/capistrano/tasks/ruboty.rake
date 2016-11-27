@@ -4,6 +4,7 @@ namespace :load do
 
     set :ruboty_role,         -> { :app }
     set :ruboty_servers,      -> { release_roles(fetch(:ruboty_role)) }
+    set :ruboty_env,          -> { fetch(:ruboty_env, fetch(:stage)) }
     set :ruboty_command,      -> { [:ruboty] }
     set :ruboty_daemon,       -> { true }
     set :ruboty_dotenv,       -> { true }
@@ -28,7 +29,7 @@ namespace :deploy do
 end
 
 namespace :ruboty do
-  task start: :set_ruboty_env do
+  task :start do
     command_args  = Array(fetch(:ruboty_command))
     command_args += %w(--dotenv) if fetch(:ruboty_dotenv)
     command_args += %w(--daemon) if fetch(:ruboty_daemon)
@@ -44,7 +45,7 @@ namespace :ruboty do
     end
   end
 
-  task stop: :set_ruboty_env do
+  task :stop do
     on fetch(:ruboty_servers) do
       within release_path do
         with ruboty_env: fetch(:ruboty_env) do
@@ -75,13 +76,9 @@ namespace :ruboty do
     pid
   end
 
-  task restart: :set_ruboty_env do
+  task :restart do
     invoke "ruboty:stop"
     invoke "ruboty:start"
-  end
-
-  task :set_ruboty_env do
-    set :ruboty_env, (fetch(:ruboty_env) || fetch(:stage))
   end
 
   task :add_default_hooks do
