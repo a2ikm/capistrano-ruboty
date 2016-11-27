@@ -29,6 +29,7 @@ namespace :deploy do
 end
 
 namespace :ruboty do
+  desc "Start ruboty"
   task :start do
     command_args  = []
     command_args += Array(fetch(:ruboty_command))
@@ -46,6 +47,7 @@ namespace :ruboty do
     end
   end
 
+  desc "Stop ruboty"
   task :stop do
     on fetch(:ruboty_servers) do
       within release_path do
@@ -77,6 +79,7 @@ namespace :ruboty do
     pid
   end
 
+  desc "Restart ruboty"
   task :restart do
     invoke "ruboty:stop"
     invoke "ruboty:start"
